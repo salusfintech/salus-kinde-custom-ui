@@ -10,26 +10,31 @@ const styles: {
   heading: {
     margin: "0 0 0.5rem",
     color: "#0f172a",
-    fontSize: "1.5rem",
-    fontWeight: 600,
+    fontSize: "1.625rem",
+    fontWeight: 700,
     letterSpacing: "-0.025em",
-    lineHeight: 1.25,
+    lineHeight: 1.2,
   },
   description: {
-    margin: "0 0 1.5rem",
+    margin: "0 0 2rem",
     color: "#64748b",
-    fontSize: "0.875rem",
+    fontSize: "0.9375rem",
     lineHeight: 1.5,
   },
 };
 
-export const Widget = (props: { heading: string; description: string }) => {
+export const Widget = (_props: { heading: string; description: string }) => {
   return (
     <main className="login-form">
       <div style={{ width: "100%" }}>
-        <h1 style={styles.heading}>{props.heading}</h1>
-        <p style={styles.description}>{props.description}</p>
+        <h1 style={styles.heading}>Sign in</h1>
+        <p style={styles.description}>
+          Enter your work email to continue.
+        </p>
         {getKindeWidget()}
+        <a className="help-link" href="mailto:support@salusfintech.com">
+          Having trouble signing in?
+        </a>
       </div>
     </main>
   );

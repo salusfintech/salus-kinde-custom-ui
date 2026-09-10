@@ -2,19 +2,21 @@ import { SALUS_HERO_TILE_DATA_URI } from "./salus-hero-tile";
 
 const kindeVariables = {
   baseFontFamily:
-    "-apple-system, system-ui, BlinkMacSystemFont, Helvetica, Arial, Segoe UI, Roboto, sans-serif",
-  controlSelectTextBorderRadius: "0.375rem",
+    "Inter, -apple-system, system-ui, BlinkMacSystemFont, Helvetica, Arial, Segoe UI, Roboto, sans-serif",
+  controlSelectTextBorderRadius: "0.5rem",
   buttonPrimaryBackgroundColor: "#0015d6",
   buttonPrimaryColor: "#ffffff",
-  buttonBorderRadius: "0.375rem",
+  buttonBorderRadius: "0.5rem",
   buttonSecondaryBackgroundColor: "#ffffff",
   buttonSecondaryBorderWidth: "1px",
   buttonSecondaryBorderColor: "#e2e8f0",
   buttonSecondaryBorderStyle: "solid",
-  buttonSecondaryBorderRadius: "0.375rem",
+  buttonSecondaryBorderRadius: "0.5rem",
 } as const;
 
 export const getStyles = (): string => `
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
   :root {
     --kinde-base-font-family: ${kindeVariables.baseFontFamily};
     --kinde-control-select-text-border-radius: ${kindeVariables.controlSelectTextBorderRadius};
@@ -32,87 +34,163 @@ export const getStyles = (): string => `
     --kinde-base-color: #0f172a;
   }
 
+  * {
+    box-sizing: border-box;
+  }
+
   body {
     margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   [data-kinde-control-label] {
     font-weight: 500;
+    font-size: 0.875rem;
+    margin-bottom: 0.375rem;
   }
 
   [data-kinde-choice-separator] {
-    color: #64748b;
+    color: #94a3b8;
   }
 
   [data-kinde-button-variant=primary] {
     background: #0015d6;
+    min-height: 2.75rem;
+    width: 100%;
+    font-size: 0.9375rem;
+    letter-spacing: -0.01em;
+    transition: background 150ms ease, box-shadow 150ms ease;
   }
 
-  .kinde-branding a {
-    color: #64748b;
+  [data-kinde-button-variant=primary]:hover {
+    background: #0012b3;
   }
+
+  [data-kinde-button-variant=primary]:focus-visible {
+    outline: 2px solid #0015d6;
+    outline-offset: 2px;
+  }
+
+  [data-kinde-control-select-text],
+  [data-kinde-control-input],
+  input[type="email"],
+  input[type="text"],
+  input[type="password"] {
+    min-height: 2.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e2e8f0;
+    font-size: 0.9375rem;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+
+  [data-kinde-control-select-text]:focus,
+  [data-kinde-control-input]:focus,
+  input:focus {
+    border-color: #0015d6;
+    box-shadow: 0 0 0 3px rgba(0, 21, 214, 0.1);
+    outline: none;
+  }
+
+  .kinde-branding,
+  [data-kinde-branding],
+  [class*="kinde-branding"] {
+    display: none !important;
+  }
+
+  /* ── Page shell ── */
 
   .page {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: #ffffff;
+    background: #f8fafc;
   }
+
+  /* ── Blue brand panel (hidden on mobile) ── */
 
   .brand {
     display: none;
   }
+
+  /* ── White form panel ── */
 
   .panel {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     padding: 3rem 1.5rem;
+  }
+
+  .panel-inner {
+    width: 100%;
+    max-width: 26rem;
   }
 
   .header {
     display: flex;
     align-items: center;
-    padding: 0 0 2rem;
+    margin-bottom: 2.5rem;
   }
 
   .header-logo {
-    height: 3.5rem;
+    height: 2.5rem;
     width: auto;
-    max-width: 200px;
+    max-width: 160px;
     object-fit: contain;
     object-position: left;
   }
 
   .login-form {
-    max-width: 24rem;
     width: 100%;
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
 
+  .help-link {
+    display: block;
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.8125rem;
+    color: #94a3b8;
+    text-decoration: none;
+  }
+
+  .help-link:hover {
+    color: #0015d6;
+  }
+
+  /* ── Footer ── */
+
   .footer {
-    color: #64748b;
+    color: #94a3b8;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.5rem;
     align-items: center;
     justify-content: center;
-    padding: 2rem 0 0;
+    padding: 2.5rem 0 0;
     font-size: 0.75rem;
   }
 
   .footer a {
-    color: #64748b;
+    color: #94a3b8;
     text-decoration: none;
   }
+
+  .footer a:hover {
+    color: #0015d6;
+  }
+
+  /* ── Desktop: split layout ── */
 
   @media (min-width: 1024px) {
     .page {
       flex-direction: row;
+      background: #ffffff;
     }
 
     .brand {
@@ -127,45 +205,77 @@ export const getStyles = (): string => `
       background-repeat: repeat;
       background-size: 384px 384px;
       background-position: 0 0;
+      overflow: hidden;
     }
 
     .brand-logo {
-      height: 4rem;
+      height: 3rem;
       width: auto;
-      max-width: 220px;
+      max-width: 180px;
       object-fit: contain;
       object-position: left;
       filter: brightness(0) invert(1);
     }
 
+    .brand-body {
+      max-width: 28rem;
+    }
+
     .brand-copy h1 {
       margin: 0 0 1rem;
-      font-size: 2.25rem;
-      font-weight: 600;
-      letter-spacing: -0.025em;
-      line-height: 1.2;
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
     }
 
     .brand-copy p {
       margin: 0;
-      font-size: 0.875rem;
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .brand-quote {
+      margin: 0;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      font-size: 0.8125rem;
       line-height: 1.6;
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .brand-quote strong {
+      display: block;
+      margin-top: 0.5rem;
+      font-style: normal;
+      font-weight: 500;
       color: rgba(255, 255, 255, 0.8);
     }
 
     .brand-meta {
       margin: 0;
       font-size: 0.75rem;
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(255, 255, 255, 0.5);
     }
 
     .panel {
       flex: 1;
       padding: 3rem 4rem;
+      background: #ffffff;
     }
 
     .header {
-      display: none;
+      margin-bottom: 3rem;
+    }
+
+    .header-logo {
+      height: 2rem;
+    }
+
+    .help-link {
+      text-align: left;
     }
   }
 `;
