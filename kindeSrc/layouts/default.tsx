@@ -12,19 +12,12 @@ export const DefaultLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="page">
       <aside className="brand">
-        <img alt="Salus" className="brand-logo" src={getLogoUrl()} />
-        <div className="brand-body">
-          <div className="brand-copy">
-            <h1>Make Gen Z Members for Life</h1>
-            <p>
-              Meet younger members where they are. Offer the products they want.
-              Earn lifetime loyalty.
-            </p>
-          </div>
-          <p className="brand-quote">
-            &ldquo;Salus helped us reach members we never could before &mdash;
-            and keep them.&rdquo;
-            <strong>Credit Union Partner</strong>
+        <div className="brand-center">
+          <img alt="Salus" className="brand-logo" src={getLogoUrl()} />
+          <h1 className="brand-heading">Make Gen Z Members for Life</h1>
+          <p className="brand-tagline">
+            Meet younger members where they are. Offer the products they want.
+            Earn lifetime loyalty.
           </p>
         </div>
         <p className="brand-meta">&copy; {new Date().getFullYear()} Salus Financial Technology, Inc.</p>

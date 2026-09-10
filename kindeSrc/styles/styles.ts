@@ -197,7 +197,8 @@ export const getStyles = (): string => `
       display: flex;
       flex: 1.1;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
+      align-items: center;
       padding: 3rem;
       color: #ffffff;
       background-color: #0015d6;
@@ -206,22 +207,27 @@ export const getStyles = (): string => `
       background-size: 384px 384px;
       background-position: 0 0;
       overflow: hidden;
+      position: relative;
+      text-align: center;
+    }
+
+    .brand-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 26rem;
     }
 
     .brand-logo {
-      height: 3rem;
+      height: 3.5rem;
       width: auto;
-      max-width: 180px;
+      max-width: 200px;
       object-fit: contain;
-      object-position: left;
       filter: brightness(0) invert(1);
+      margin-bottom: 2rem;
     }
 
-    .brand-body {
-      max-width: 28rem;
-    }
-
-    .brand-copy h1 {
+    .brand-heading {
       margin: 0 0 1rem;
       font-size: 2.5rem;
       font-weight: 700;
@@ -229,35 +235,22 @@ export const getStyles = (): string => `
       line-height: 1.15;
     }
 
-    .brand-copy p {
+    .brand-tagline {
       margin: 0;
       font-size: 0.9375rem;
       line-height: 1.7;
       color: rgba(255, 255, 255, 0.75);
     }
 
-    .brand-quote {
-      margin: 0;
-      padding-top: 2rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.15);
-      font-size: 0.8125rem;
-      line-height: 1.6;
-      font-style: italic;
-      color: rgba(255, 255, 255, 0.6);
-    }
-
-    .brand-quote strong {
-      display: block;
-      margin-top: 0.5rem;
-      font-style: normal;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 0.8);
-    }
-
     .brand-meta {
+      position: absolute;
+      bottom: 2rem;
+      left: 0;
+      right: 0;
+      text-align: center;
       margin: 0;
       font-size: 0.75rem;
-      color: rgba(255, 255, 255, 0.5);
+      color: rgba(255, 255, 255, 0.4);
     }
 
     .panel {
