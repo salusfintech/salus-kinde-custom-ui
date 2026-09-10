@@ -1,21 +1,8 @@
+import { getLogoUrl } from "@kinde/infrastructure";
 import React from "react";
 
 import { Footer } from "../components/footer";
 import { Header } from "../components/header";
-
-const styles: {
-  container: React.CSSProperties;
-} = {
-  container: {
-    minHeight: "100vh",
-    color: "#fff",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    background:
-      "url(https://asset.kindedemo.com/evolve-ai/bg.png) lightgray 50% / cover no-repeat",
-  },
-};
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -23,10 +10,27 @@ type LayoutProps = {
 
 export const DefaultLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div style={styles.container}>
-      <Header />
-      {children}
-      <Footer />
+    <div className="page">
+      <aside className="brand">
+        <img
+          alt="Salus"
+          className="brand-logo"
+          src={getLogoUrl()}
+        />
+        <div className="brand-copy">
+          <h1>Make Gen Z Members for Life</h1>
+          <p>
+            Sign in to the Salus dashboard to manage products, members, and
+            reporting for your credit union.
+          </p>
+        </div>
+        <p className="brand-meta">For credit union staff</p>
+      </aside>
+      <section className="panel">
+        <Header />
+        {children}
+        <Footer />
+      </section>
     </div>
   );
 };

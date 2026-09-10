@@ -1,16 +1,12 @@
 "use server";
-import React from "react";
 
-const styles = {
-  logo: {
-    width: "200px",
-  },
-};
+import { getLogoUrl } from "@kinde/infrastructure";
+import React from "react";
 
 export const Header = () => {
   return (
     <div className="header">
-      <img style={styles.logo} src={"/logo"} />
+      <img alt="Salus" className="header-logo" src={getLogoUrl()} />
     </div>
   );
 };

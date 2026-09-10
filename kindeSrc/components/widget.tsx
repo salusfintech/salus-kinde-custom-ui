@@ -4,43 +4,29 @@ import { getKindeWidget } from "@kinde/infrastructure";
 import React from "react";
 
 const styles: {
-  container: React.CSSProperties;
   heading: React.CSSProperties;
   description: React.CSSProperties;
 } = {
-  container: {
-    minHeight: "100vh",
-    color: "#fff",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    background:
-      "url(https://asset.kindedemo.com/evolve-ai/bg.png) lightgray 50% / cover no-repeat",
-  },
-
   heading: {
-    alignSelf: "stretch",
-    color: "#F5F5F5",
-    fontSize: "32px",
-    fontStyle: "normal",
-    fontWeight: 500,
-    lineHeight: "32px" /* 100% */,
-    letterSpacing: "-0.64px",
-    textAlign: "center",
+    margin: "0 0 0.5rem",
+    color: "#0f172a",
+    fontSize: "1.5rem",
+    fontWeight: 600,
+    letterSpacing: "-0.025em",
+    lineHeight: 1.25,
   },
   description: {
-    marginBottom: "1.5rem",
+    margin: "0 0 1.5rem",
+    color: "#64748b",
+    fontSize: "0.875rem",
+    lineHeight: 1.5,
   },
 };
 
 export const Widget = (props: { heading: string; description: string }) => {
   return (
     <main className="login-form">
-      <div
-        style={{
-          width: "100%",
-        }}
-      >
+      <div style={{ width: "100%" }}>
         <h1 style={styles.heading}>{props.heading}</h1>
         <p style={styles.description}>{props.description}</p>
         {getKindeWidget()}
