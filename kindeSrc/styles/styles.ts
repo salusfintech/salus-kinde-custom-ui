@@ -136,9 +136,9 @@ export const getStyles = (): string => `
   }
 
   .header-logo {
-    height: 2.5rem;
+    height: 3rem;
     width: auto;
-    max-width: 160px;
+    max-width: 200px;
     object-fit: contain;
     object-position: left;
   }
@@ -271,7 +271,7 @@ export const getStyles = (): string => `
     }
 
     .header-logo {
-      height: 2rem;
+      height: 2.5rem;
     }
 
     .help-link {
