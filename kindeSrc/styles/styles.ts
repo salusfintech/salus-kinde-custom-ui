@@ -208,6 +208,15 @@ export const getStyles = (): string => `
       overflow: hidden;
     }
 
+    .brand-logo {
+      height: 3rem;
+      width: auto;
+      max-width: 180px;
+      object-fit: contain;
+      object-position: left;
+      filter: brightness(0) invert(1);
+    }
+
     .brand-body {
       max-width: 28rem;
     }
@@ -258,11 +267,7 @@ export const getStyles = (): string => `
     }
 
     .header {
-      margin-bottom: 3rem;
-    }
-
-    .header-logo {
-      height: 2.5rem;
+      display: none;
     }
 
     .help-link {
