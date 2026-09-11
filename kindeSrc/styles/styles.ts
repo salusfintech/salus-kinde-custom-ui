@@ -197,8 +197,7 @@ export const getStyles = (): string => `
       display: flex;
       flex: 1.1;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      justify-content: space-between;
       padding: 3rem;
       color: #ffffff;
       background-color: #0015d6;
@@ -207,27 +206,22 @@ export const getStyles = (): string => `
       background-size: 384px 384px;
       background-position: 0 0;
       overflow: hidden;
-      position: relative;
-      text-align: center;
-    }
-
-    .brand-center {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      max-width: 26rem;
     }
 
     .brand-logo {
-      height: 3.5rem;
+      height: 3rem;
       width: auto;
-      max-width: 200px;
+      max-width: 180px;
       object-fit: contain;
+      object-position: left;
       filter: brightness(0) invert(1);
-      margin-bottom: 2rem;
     }
 
-    .brand-heading {
+    .brand-copy {
+      max-width: 28rem;
+    }
+
+    .brand-copy h1 {
       margin: 0 0 1rem;
       font-size: 2.5rem;
       font-weight: 700;
@@ -235,7 +229,7 @@ export const getStyles = (): string => `
       line-height: 1.15;
     }
 
-    .brand-tagline {
+    .brand-copy p {
       margin: 0;
       font-size: 0.9375rem;
       line-height: 1.7;
@@ -243,11 +237,6 @@ export const getStyles = (): string => `
     }
 
     .brand-meta {
-      position: absolute;
-      bottom: 2rem;
-      left: 0;
-      right: 0;
-      text-align: center;
       margin: 0;
       font-size: 0.75rem;
       color: rgba(255, 255, 255, 0.4);
