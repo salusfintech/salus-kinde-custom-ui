@@ -198,7 +198,7 @@ export const getStyles = (): string => `
       display: flex;
       flex: 1;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
       padding: 3rem;
       color: #ffffff;
       background-color: #0015d6;
@@ -246,6 +246,7 @@ export const getStyles = (): string => `
 
     .brand-copy {
       max-width: 28rem;
+      margin-top: 5rem;
     }
 
     .brand-copy h1 {
@@ -270,7 +271,7 @@ export const getStyles = (): string => `
     }
 
     .brand-meta {
-      margin: 0;
+      margin: auto 0 0;
       font-size: 0.75rem;
       color: rgba(255, 255, 255, 0.4);
     }
