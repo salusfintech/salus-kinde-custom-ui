@@ -1,3 +1,4 @@
+import { getDarkModeLogoUrl } from "@kinde/infrastructure";
 import React from "react";
 
 import { Footer } from "../components/footer";
@@ -11,7 +12,7 @@ export const DefaultLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="page">
       <aside className="brand">
-        <div className="brand-logo">salus</div>
+        <img alt="Salus" className="brand-logo" src={getDarkModeLogoUrl()} />
         <div className="brand-copy">
           <h1>Make Gen Z Members for Life</h1>
           <p>

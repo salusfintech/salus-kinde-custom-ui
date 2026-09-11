@@ -136,11 +136,11 @@ export const getStyles = (): string => `
   }
 
   .header-logo {
-    font-size: 1.75rem;
-    font-weight: 700;
-    letter-spacing: -0.04em;
-    color: #0f172a;
-    line-height: 1;
+    height: 3rem;
+    width: auto;
+    max-width: 200px;
+    object-fit: contain;
+    object-position: left;
   }
 
   .login-form {
@@ -209,11 +209,11 @@ export const getStyles = (): string => `
     }
 
     .brand-logo {
-      font-size: 2.25rem;
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      color: #ffffff;
-      line-height: 1;
+      height: 3.5rem;
+      width: auto;
+      max-width: 220px;
+      object-fit: contain;
+      object-position: left;
     }
 
     .brand-copy {
