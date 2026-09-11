@@ -225,9 +225,9 @@ export const getStyles = (): string => `
     }
 
     .brand-logo {
-      height: 5.5rem;
-      width: auto;
-      max-width: 320px;
+      width: 12rem;
+      height: auto;
+      max-width: none;
       object-fit: contain;
       object-position: left;
     }
