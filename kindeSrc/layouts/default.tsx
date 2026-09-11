@@ -20,16 +20,16 @@ export const DefaultLayout: React.FC<LayoutProps> = ({ children }) => {
               patternUnits="userSpaceOnUse"
               width="384"
             >
-              <rect fill="#EEF2F6" fillOpacity="0.08" height="64" width="64" x="128" y="0" />
-              <rect fill="#EEF2F6" fillOpacity="0.08" height="64" width="64" x="320" y="64" />
-              <rect fill="#EEF2F6" fillOpacity="0.08" height="64" width="64" x="0" y="128" />
-              <rect fill="#EEF2F6" fillOpacity="0.08" height="64" width="64" x="192" y="192" />
-              <rect fill="#EEF2F6" fillOpacity="0.08" height="64" width="64" x="64" y="256" />
-              <rect fill="#EEF2F6" fillOpacity="0.08" height="64" width="64" x="256" y="320" />
+              <rect fill="#EEF2F6" fillOpacity="0.1" height="64" width="64" x="128" y="0" />
+              <rect fill="#EEF2F6" fillOpacity="0.1" height="64" width="64" x="320" y="64" />
+              <rect fill="#EEF2F6" fillOpacity="0.1" height="64" width="64" x="0" y="128" />
+              <rect fill="#EEF2F6" fillOpacity="0.1" height="64" width="64" x="192" y="192" />
+              <rect fill="#EEF2F6" fillOpacity="0.1" height="64" width="64" x="64" y="256" />
+              <rect fill="#EEF2F6" fillOpacity="0.1" height="64" width="64" x="256" y="320" />
               <path
                 d="M64 0V384M128 0V384M192 0V384M256 0V384M320 0V384M384 0V384M0 64H384M0 128H384M0 192H384M0 256H384M0 320H384M0 384H384"
                 stroke="#CDD5DF"
-                strokeOpacity="0.25"
+                strokeOpacity="0.3"
               />
             </pattern>
           </defs>
@@ -37,7 +37,7 @@ export const DefaultLayout: React.FC<LayoutProps> = ({ children }) => {
         </svg>
         <img alt="Salus" className="brand-logo" src={getDarkModeLogoUrl()} />
         <div className="brand-copy">
-          <h1>Make Gen Z Members for Life</h1>
+          <h1>Make <strong>Gen Z</strong> Members for Life</h1>
           <p>
             Meet younger members where they are. Offer the products they want.
             Earn lifetime loyalty.
