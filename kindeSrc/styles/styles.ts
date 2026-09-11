@@ -206,6 +206,22 @@ export const getStyles = (): string => `
       background-size: 384px 384px;
       background-position: 0 0;
       overflow: hidden;
+      position: relative;
+    }
+
+    .brand::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 100% at 90% 50%, transparent 0%, #0015d6 70%),
+        radial-gradient(ellipse 60% 80% at 20% 80%, transparent 0%, #0015d6 60%);
+      pointer-events: none;
+    }
+
+    .brand > * {
+      position: relative;
+      z-index: 1;
     }
 
     .brand-logo {
