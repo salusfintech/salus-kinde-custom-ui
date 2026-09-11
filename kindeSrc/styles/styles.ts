@@ -1,5 +1,3 @@
-import { SALUS_HERO_TILE_DATA_URI } from "./salus-hero-tile";
-
 const kindeVariables = {
   baseFontFamily:
     "Inter, -apple-system, system-ui, BlinkMacSystemFont, Helvetica, Arial, Segoe UI, Roboto, sans-serif",
@@ -201,27 +199,37 @@ export const getStyles = (): string => `
       padding: 3rem;
       color: #ffffff;
       background-color: #0015d6;
-      background-image: url("${SALUS_HERO_TILE_DATA_URI}");
-      background-repeat: repeat;
-      background-size: 384px 384px;
-      background-position: 0 0;
       overflow: hidden;
       position: relative;
+    }
+
+    .brand-grid {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
     }
 
     .brand::after {
       content: "";
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(ellipse 80% 100% at 90% 50%, transparent 0%, #0015d6 70%),
-        radial-gradient(ellipse 60% 80% at 20% 80%, transparent 0%, #0015d6 60%);
+      background: radial-gradient(
+        ellipse 75% 60% at 30% 50%,
+        #0015d6 0%,
+        rgba(0, 21, 214, 0) 100%
+      );
       pointer-events: none;
     }
 
     .brand > * {
       position: relative;
       z-index: 1;
+    }
+
+    .brand-grid {
+      z-index: 0;
     }
 
     .brand-logo {
