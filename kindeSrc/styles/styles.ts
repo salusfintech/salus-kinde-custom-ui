@@ -56,6 +56,7 @@ export const getStyles = (): string => `
     background: #0015d6;
     min-height: 2.75rem;
     width: 100%;
+    max-width: 100%;
     font-size: 0.9375rem;
     letter-spacing: -0.01em;
     transition: background 150ms ease, box-shadow 150ms ease;
@@ -143,9 +144,11 @@ export const getStyles = (): string => `
 
   .login-form {
     width: 100%;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    overflow: hidden;
   }
 
   .help-link {
@@ -215,6 +218,7 @@ export const getStyles = (): string => `
       content: "";
       position: absolute;
       inset: 0;
+      z-index: 1;
       background: radial-gradient(
         ellipse 90% 80% at 35% 45%,
         rgba(0, 21, 214, 0) 0%,
@@ -225,7 +229,7 @@ export const getStyles = (): string => `
 
     .brand > * {
       position: relative;
-      z-index: 1;
+      z-index: 2;
     }
 
     .brand-grid {
@@ -272,10 +276,11 @@ export const getStyles = (): string => `
     }
 
     .panel {
-      flex: 0 0 30rem;
-      max-width: 30rem;
-      padding: 3rem 4rem;
+      flex: 0 0 36rem;
+      max-width: 36rem;
+      padding: 3rem;
       background: #ffffff;
+      overflow: hidden;
     }
 
     .header {
