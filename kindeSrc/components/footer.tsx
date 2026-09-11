@@ -9,7 +9,7 @@ export const Footer = () => {
         <a href="https://www.salusfintech.com/privacy-policy" target="_blank" rel="noopener noreferrer">
           Privacy
         </a>
-        <a href="https://www.salusfintech.com/terms" target="_blank" rel="noopener noreferrer">
+        <a href="https://www.salusfintech.com/terms-of-use" target="_blank" rel="noopener noreferrer">
           Terms
         </a>
       </div>
