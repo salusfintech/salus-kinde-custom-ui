@@ -233,8 +233,12 @@ export const getStyles = (): string => `
     }
 
     .brand-copy {
+      position: absolute;
+      top: 50%;
+      left: 3rem;
       max-width: 28rem;
-      margin-top: 5rem;
+      margin: 0;
+      transform: translateY(-50%);
     }
 
     .brand-copy h1 {
