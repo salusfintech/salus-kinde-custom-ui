@@ -1,4 +1,3 @@
-import { getLogoUrl } from "@kinde/infrastructure";
 import React from "react";
 
 import { Footer } from "../components/footer";
@@ -12,7 +11,7 @@ export const DefaultLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="page">
       <aside className="brand">
-        <img alt="Salus" className="brand-logo" src={getLogoUrl()} />
+        <div className="brand-logo">salus</div>
         <div className="brand-copy">
           <h1>Make Gen Z Members for Life</h1>
           <p>
