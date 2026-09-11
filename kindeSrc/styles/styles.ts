@@ -212,24 +212,12 @@ export const getStyles = (): string => `
       width: 100%;
       height: 100%;
       pointer-events: none;
-    }
-
-    .brand::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      background: radial-gradient(
-        ellipse 90% 80% at 35% 45%,
-        rgba(0, 21, 214, 0) 0%,
-        #0015d6 95%
-      );
-      pointer-events: none;
+      z-index: 0;
     }
 
     .brand > * {
       position: relative;
-      z-index: 2;
+      z-index: 1;
     }
 
     .brand-grid {
