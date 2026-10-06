@@ -2,15 +2,11 @@
 
 import React from "react";
 
-const GRID_COLUMNS = 30;
 const GRID_ROWS = 15;
 const CELL = 64;
 // Tiles fill the cell. The grid stroke is painted after them, so the line stays
 // on top and the fill meets it without a gap from subpixel rounding.
 const TILE_INSET = 0;
-const WIDTH = GRID_COLUMNS * CELL;
-const HEIGHT = GRID_ROWS * CELL;
-const MIN_VISIBILITY = 0.22;
 const MIN_SEPARATION = 2;
 // Inclusive columns that stay whole beside the 36rem form on a 1440px desktop.
 // Wider screens show more of the grid; a tile outside this band can be sliced.
@@ -22,7 +18,7 @@ const PULSE_DURATION = 52;
 const LIT_WINDOW = 8;
 // Every square peaks at the same opacity as the grid line.
 const PEAK_MAX = 0.08;
-// A console is a field of buttons, so placement is even across the visible panel.
+const BRAND_BLUE = "#0015d6";
 // Warm off-white, shared by the grid lines and the glowing squares.
 const TILE_FILL = "#F5F2EA";
 const SEED = 0x5a1506;
@@ -30,7 +26,6 @@ const SEED = 0x5a1506;
 type GridCell = {
   col: number;
   row: number;
-  weight: number;
 };
 
 type PulseTile = {
@@ -50,21 +45,18 @@ function mulberry32(seed: number) {
   };
 }
 
-// Falloff from the top center. Cells that would sit in the faint corners are skipped.
-function visibility(col: number, row: number) {
-  const dx = (col * CELL + CELL / 2 - WIDTH / 2) / (0.95 * WIDTH);
-  const dy = (row * CELL + CELL / 2) / (0.95 * HEIGHT);
-  const d = Math.hypot(dx, dy);
-  if (d >= 1) return 0;
-  if (d <= 0.55) return 1 - 0.45 * (d / 0.55);
-  return 0.55 * (1 - (d - 0.55) / 0.45);
+// Opaque stroke of TILE_FILL at PEAK_MAX over the brand blue. A translucent
+// stroke painted over a lit square would add a second coat and brighten the edge.
+function lineStroke() {
+  const channel = (hex: string, offset: number) => Number.parseInt(hex.slice(offset, offset + 2), 16);
+  const mix = (foreground: number, background: number) =>
+    Math.round(background + (foreground - background) * PEAK_MAX)
+      .toString(16)
+      .padStart(2, "0");
+  return `#${[1, 3, 5].map((offset) => mix(channel(TILE_FILL, offset), channel(BRAND_BLUE, offset))).join("")}`;
 }
 
-function screenWeight(col: number) {
-  const [start, end] = SCREEN_COLS;
-  if (col >= start && col <= end) return 1;
-  return 0;
-}
+const LINE_STROKE = lineStroke();
 
 // Order buttons so the ones that glow together (a sliding window of LIT_WINDOW)
 // are spread across the panel, including across the loop point.
@@ -102,16 +94,17 @@ function spreadOrder(cells: GridCell[]): GridCell[] {
   return path;
 }
 
-// Scattered tiles inside the columns that stay fully on screen. Packs are drawn
+// Scattered tiles in the columns that stay fully on screen. The bottom row is
+// left empty so a square does not cover the copyright line. Packs are drawn
 // until 64 fit without two squares sharing an edge, then the most crowded
 // extras are dropped.
 function buildTiles(): PulseTile[] {
   const next = mulberry32(SEED);
   const pool: GridCell[] = [];
-  for (let row = 0; row < GRID_ROWS; row += 1) {
-    for (let col = 0; col < GRID_COLUMNS; col += 1) {
-      const weight = visibility(col, row) * screenWeight(col);
-      if (weight >= MIN_VISIBILITY) pool.push({ col, row, weight });
+  const [startCol, endCol] = SCREEN_COLS;
+  for (let row = 0; row < GRID_ROWS - 1; row += 1) {
+    for (let col = startCol; col <= endCol; col += 1) {
+      pool.push({ col, row });
     }
   }
 
@@ -199,7 +192,7 @@ export const BrandGrid = () => {
           y={tile.row * CELL + TILE_INSET}
         />
       ))}
-      <path d={GRID_LINES} fill="none" stroke={TILE_FILL} strokeOpacity={PEAK_MAX} />
+      <path d={GRID_LINES} fill="none" stroke={LINE_STROKE} />
     </svg>
   );
 };
