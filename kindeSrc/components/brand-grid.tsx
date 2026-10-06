@@ -52,6 +52,14 @@ const HIGHLIGHTS: [number, number][] = [
 const GRID_LINES =
   "M64 0V960M128 0V960M192 0V960M256 0V960M320 0V960M384 0V960M448 0V960M512 0V960M576 0V960M640 0V960M704 0V960M768 0V960M832 0V960M896 0V960M960 0V960M1024 0V960M1088 0V960M1152 0V960M1216 0V960M1280 0V960M1344 0V960M1408 0V960M1472 0V960M1536 0V960M1600 0V960M1664 0V960M1728 0V960M1792 0V960M1856 0V960M0 64H1920M0 128H1920M0 192H1920M0 256H1920M0 320H1920M0 384H1920M0 448H1920M0 512H1920M0 576H1920M0 640H1920M0 704H1920M0 768H1920M0 832H1920M0 896H1920";
 
+const TILE_DURATIONS = [12, 14, 16, 18] as const;
+
+function tileTiming(x: number, y: number, index: number) {
+  const delay = -(((x * 3 + y * 5 + index * 17) % 80) / 10);
+  const dur = TILE_DURATIONS[((x / 64 + y / 64) | 0) % TILE_DURATIONS.length];
+  return { delay, dur };
+}
+
 export const BrandGrid = () => {
   return (
     <svg
@@ -72,17 +80,26 @@ export const BrandGrid = () => {
       </defs>
       <g mask="url(#salus-hero-mask)">
         <path d={GRID_LINES} fill="none" stroke="#CDD5DF" strokeOpacity="0.28" />
-        {HIGHLIGHTS.map(([x, y]) => (
-          <rect
-            fill="#EEF2F6"
-            fillOpacity="0.12"
-            height="64"
-            key={`${x}-${y}`}
-            width="64"
-            x={x}
-            y={y}
-          />
-        ))}
+        {HIGHLIGHTS.map(([x, y], index) => {
+          const { delay, dur } = tileTiming(x, y, index);
+          return (
+            <rect
+              className="tile"
+              fill="#EEF2F6"
+              height="64"
+              key={`${x}-${y}`}
+              style={
+                {
+                  "--delay": `${delay}s`,
+                  "--dur": `${dur}s`,
+                } as React.CSSProperties
+              }
+              width="64"
+              x={x}
+              y={y}
+            />
+          );
+        })}
       </g>
     </svg>
   );

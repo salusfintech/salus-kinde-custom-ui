@@ -224,6 +224,13 @@ export const getStyles = (): string => `
       z-index: 0;
     }
 
+    .brand-grid .tile {
+      fill: #eef2f6;
+      fill-opacity: 0;
+      animation: tile-glow var(--dur, 14s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+    }
+
     .brand-logo {
       width: 12rem;
       height: auto;
@@ -282,6 +289,18 @@ export const getStyles = (): string => `
 
     .help-link {
       text-align: left;
+    }
+  }
+
+  @keyframes tile-glow {
+    0%, 50%, 100% { fill-opacity: 0; }
+    68%, 82% { fill-opacity: 0.2; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .brand-grid .tile {
+      animation: none;
+      fill-opacity: 0.12;
     }
   }
 `;
