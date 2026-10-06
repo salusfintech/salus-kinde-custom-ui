@@ -10,25 +10,21 @@ const CELL = 64;
 const TILE_INSET = 0;
 const WIDTH = GRID_COLUMNS * CELL;
 const HEIGHT = GRID_ROWS * CELL;
-const MIN_SEPARATION = 2;
 const MIN_VISIBILITY = 0.22;
-// The panel sits beside a fixed 36rem form and uses xMidYMid slice, so on
-// common screens only the middle columns are on screen (≈7.8–22.2 at 1440x900,
-// ≈5.7–24.3 at 1920x1080). Columns beyond this band are never visible.
-const SCREEN_FULL_COLS: [number, number] = [7, 23];
-const SCREEN_EDGE_COLS: [number, number] = [4, 26];
+// Inclusive columns that stay whole beside the 36rem form on a 1440px desktop.
+// Wider screens show more of the grid; a tile outside this band can be sliced.
+const SCREEN_COLS: [number, number] = [8, 21];
 // One shared clock, evenly spaced, so the number of lit buttons stays steady.
 // The glow window is the last 12.5% of the cycle (8 of 64 buttons).
 const PULSE_COUNT = 64;
 const PULSE_DURATION = 52;
 const LIT_WINDOW = 8;
-// Peak opacity scales with mask visibility: 0.08 at the top, fading toward 0.05.
+// Peak opacity is 0.08 at the top and fades toward 0.05 lower on the panel.
 const PEAK_MAX = 0.08;
 const PEAK_FLOOR = 0.6;
 // Random ± fraction applied to each button's peak so neighbours never match.
 const PEAK_JITTER = 0.15;
 // A console is a field of buttons, so placement is even across the visible panel.
-const CORNER_BIAS = 0;
 // Warm off-white, shared by the grid lines and the glowing squares.
 const TILE_FILL = "#F5F2EA";
 const SEED = 0x5a1506;
@@ -56,8 +52,8 @@ function mulberry32(seed: number) {
   };
 }
 
-// How much of a cell survives the salus-hero-fade mask (cx 50%, cy 0%, r 95%,
-// objectBoundingBox units, stops 1 -> 0.55 at 55% -> 0 at 100%).
+// Falloff from the top center. Faint cells are skipped, and the rest glow
+// a little dimmer as they get lower on the panel.
 function visibility(col: number, row: number) {
   const dx = (col * CELL + CELL / 2 - WIDTH / 2) / (0.95 * WIDTH);
   const dy = (row * CELL + CELL / 2) / (0.95 * HEIGHT);
@@ -67,29 +63,10 @@ function visibility(col: number, row: number) {
   return 0.55 * (1 - (d - 0.55) / 0.45);
 }
 
-// Likelihood that a column is inside the sliced viewport on a typical screen.
 function screenWeight(col: number) {
-  const center = col + 0.5;
-  const [fullStart, fullEnd] = SCREEN_FULL_COLS;
-  const [edgeStart, edgeEnd] = SCREEN_EDGE_COLS;
-  if (center >= fullStart && center <= fullEnd) return 1;
-  if (center < edgeStart || center > edgeEnd) return 0;
-  if (center < fullStart) return (center - edgeStart) / (fullStart - edgeStart);
-  return (edgeEnd - center) / (edgeEnd - fullEnd);
-}
-
-// Placement multiplier (>= 1) that favours the top-left corner near the logo.
-function cornerBias(col: number, row: number) {
-  const nx = (col + 0.5) / GRID_COLUMNS;
-  const ny = (row + 0.5) / GRID_ROWS;
-  const d = Math.hypot(nx, ny) / Math.SQRT2;
-  return 1 + CORNER_BIAS * (1 - d);
-}
-
-// Manhattan distance: a separation of 2 forbids edge-adjacent tiles but allows
-// diagonal neighbours, which packs the roster denser than a Chebyshev rule.
-function cellDistance(a: GridCell, b: GridCell) {
-  return Math.abs(a.col - b.col) + Math.abs(a.row - b.row);
+  const [start, end] = SCREEN_COLS;
+  if (col >= start && col <= end) return 1;
+  return 0;
 }
 
 // Order buttons so the ones that glow together (a sliding window of LIT_WINDOW)
@@ -128,29 +105,28 @@ function spreadOrder(cells: GridCell[]): GridCell[] {
   return path;
 }
 
-// Blue-noise roster of buttons inside the on-screen crop. Buttons share one
-// clock, spaced evenly, so a steady handful stay lit.
+// Tiles stay inside columns that are fully on screen, and on a checkerboard so
+// two glowing squares never share an edge. The on-screen band is too narrow for
+// the dart throw to reach 64.
 function buildTiles(): PulseTile[] {
   const next = mulberry32(SEED);
   const pool: GridCell[] = [];
   for (let row = 0; row < GRID_ROWS; row += 1) {
     for (let col = 0; col < GRID_COLUMNS; col += 1) {
+      if ((col + row) % 2 !== 0) continue;
       const weight = visibility(col, row) * screenWeight(col);
       if (weight >= MIN_VISIBILITY) pool.push({ col, row, weight });
     }
   }
 
-  const roster: GridCell[] = [];
-  let attempts = 0;
-  while (roster.length < PULSE_COUNT && attempts < 20000) {
-    attempts += 1;
-    const cell = pool[Math.floor(next() * pool.length)];
-    if (next() > cell.weight * cornerBias(cell.col, cell.row)) continue;
-    if (roster.some((other) => cellDistance(cell, other) < MIN_SEPARATION)) continue;
-    roster.push(cell);
+  for (let i = pool.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(next() * (i + 1));
+    const swap = pool[i];
+    pool[i] = pool[j];
+    pool[j] = swap;
   }
 
-  const path = spreadOrder(roster.slice(0, PULSE_COUNT));
+  const path = spreadOrder(pool.slice(0, PULSE_COUNT));
 
   return path.map((cell, index) => {
     const jitter = 1 + (next() * 2 - 1) * PEAK_JITTER;
@@ -187,19 +163,9 @@ export const BrandGrid = () => {
       preserveAspectRatio="xMidYMid slice"
       viewBox="0 0 1920 960"
     >
-      <defs>
-        <radialGradient cx="50%" cy="0%" id="salus-hero-fade" r="95%">
-          <stop offset="0%" stopColor="#fff" stopOpacity="1" />
-          <stop offset="55%" stopColor="#fff" stopOpacity="0.55" />
-          <stop offset="100%" stopColor="#fff" stopOpacity="0" />
-        </radialGradient>
-        <mask id="salus-hero-mask">
-          <rect fill="url(#salus-hero-fade)" height="960" width="1920" />
-        </mask>
-      </defs>
       {PULSE_TILES.map((tile) => (
         <rect
-          className="tile"
+          className={tile.slot < LIT_WINDOW ? "tile is-rest" : "tile"}
           fill={TILE_FILL}
           height={CELL - TILE_INSET * 2}
           key={`${tile.col}-${tile.row}`}
@@ -209,9 +175,7 @@ export const BrandGrid = () => {
           y={tile.row * CELL + TILE_INSET}
         />
       ))}
-      <g mask="url(#salus-hero-mask)">
-        <path d={GRID_LINES} fill="none" stroke={TILE_FILL} strokeOpacity={PEAK_MAX} />
-      </g>
+      <path d={GRID_LINES} fill="none" stroke={TILE_FILL} strokeOpacity={PEAK_MAX} />
     </svg>
   );
 };

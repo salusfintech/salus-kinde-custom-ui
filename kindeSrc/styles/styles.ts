@@ -303,7 +303,11 @@ export const getStyles = (): string => `
   @media (prefers-reduced-motion: reduce) {
     .brand-grid .tile {
       animation: none;
-      opacity: 0.09;
+      opacity: 0;
+    }
+
+    .brand-grid .tile.is-rest {
+      opacity: var(--peak, 0.08);
     }
   }
 `;
