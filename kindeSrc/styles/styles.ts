@@ -227,7 +227,7 @@ export const getStyles = (): string => `
     .brand-grid .tile {
       fill: #eef2f6;
       fill-opacity: 0;
-      animation: tile-glow var(--dur, 14s) ease-in-out infinite;
+      animation: tile-glow var(--dur, 12s) ease-in-out infinite;
       animation-delay: var(--delay, 0s);
     }
 
