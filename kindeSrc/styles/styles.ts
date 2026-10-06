@@ -206,7 +206,12 @@ export const getStyles = (): string => `
       position: relative;
     }
 
-    .brand-grid {
+    .brand > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand > .brand-grid {
       position: absolute;
       inset: 0;
       width: 100%;
@@ -215,19 +220,13 @@ export const getStyles = (): string => `
       z-index: 0;
     }
 
-    .brand > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .brand-grid {
-      z-index: 0;
-    }
-
     .brand-grid .tile {
-      fill: #eef2f6;
+      fill: #f5f2ea;
       fill-opacity: 0;
-      animation: tile-glow var(--dur, 12s) ease-in-out infinite;
+      animation-name: tile-glow;
+      animation-duration: var(--dur, 52s);
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
       animation-delay: var(--delay, 0s);
     }
 
@@ -292,15 +291,19 @@ export const getStyles = (): string => `
     }
   }
 
+  /* Steady console. The bright window is the last 12.5% of a shared 52s cycle,
+     so 8 of 64 buttons are glowing at once. Linear timing keeps that count fixed;
+     the curves only shape the rise and fall. */
   @keyframes tile-glow {
-    0%, 50%, 100% { fill-opacity: 0; }
-    68%, 82% { fill-opacity: 0.2; }
+    0%, 87.5% { fill-opacity: 0; animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1); }
+    91%, 94.5% { fill-opacity: var(--peak, 0.2); animation-timing-function: cubic-bezier(0.35, 0.25, 0.45, 1); }
+    100% { fill-opacity: 0; }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .brand-grid .tile {
       animation: none;
-      fill-opacity: 0.12;
+      fill-opacity: 0.09;
     }
   }
 `;
