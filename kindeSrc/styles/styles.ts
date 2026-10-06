@@ -222,7 +222,7 @@ export const getStyles = (): string => `
 
     .brand-grid .tile {
       fill: #f5f2ea;
-      fill-opacity: 0;
+      opacity: 0;
       animation-name: tile-glow;
       animation-duration: var(--dur, 52s);
       animation-timing-function: linear;
@@ -295,15 +295,15 @@ export const getStyles = (): string => `
      so 8 of 64 buttons are glowing at once. Linear timing keeps that count fixed;
      the curves only shape the rise and fall. */
   @keyframes tile-glow {
-    0%, 87.5% { fill-opacity: 0; animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1); }
-    91%, 94.5% { fill-opacity: var(--peak, 0.2); animation-timing-function: cubic-bezier(0.35, 0.25, 0.45, 1); }
-    100% { fill-opacity: 0; }
+    0%, 87.5% { opacity: 0; animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1); }
+    91%, 94.5% { opacity: var(--peak, 0.08); animation-timing-function: cubic-bezier(0.35, 0.25, 0.45, 1); }
+    100% { opacity: 0; }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .brand-grid .tile {
       animation: none;
-      fill-opacity: 0.09;
+      opacity: 0.09;
     }
   }
 `;

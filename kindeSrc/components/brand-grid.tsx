@@ -5,6 +5,9 @@ import React from "react";
 const GRID_COLUMNS = 30;
 const GRID_ROWS = 15;
 const CELL = 64;
+// Tiles fill the cell. The grid stroke is painted after them, so the line stays
+// on top and the fill meets it without a gap from subpixel rounding.
+const TILE_INSET = 0;
 const WIDTH = GRID_COLUMNS * CELL;
 const HEIGHT = GRID_ROWS * CELL;
 const MIN_SEPARATION = 2;
@@ -14,29 +17,20 @@ const MIN_VISIBILITY = 0.22;
 // ≈5.7–24.3 at 1920x1080). Columns beyond this band are never visible.
 const SCREEN_FULL_COLS: [number, number] = [7, 23];
 const SCREEN_EDGE_COLS: [number, number] = [4, 26];
-// Keep the logo and the headline text clear. The copy is anchored to the left
-// edge of the on-screen crop, which lands between columns ≈4.7 and ≈7.8
-// depending on the screen, so the zones cover that range of positions.
-const EXCLUDED_ZONES: { cols: [number, number]; rows: [number, number] }[] = [
-  { cols: [5, 12], rows: [0, 3] },
-  { cols: [6, 17], rows: [6, 9] },
-];
 // One shared clock, evenly spaced, so the number of lit buttons stays steady.
 // The glow window is the last 12.5% of the cycle (8 of 64 buttons).
 const PULSE_COUNT = 64;
 const PULSE_DURATION = 52;
 const LIT_WINDOW = 8;
-// Peak opacity scales with mask visibility: 0.2 at the top, fading toward 0.12.
-const PEAK_MAX = 0.2;
+// Peak opacity scales with mask visibility: 0.08 at the top, fading toward 0.05.
+const PEAK_MAX = 0.08;
 const PEAK_FLOOR = 0.6;
 // Random ± fraction applied to each button's peak so neighbours never match.
 const PEAK_JITTER = 0.15;
 // A console is a field of buttons, so placement is even across the visible panel.
 const CORNER_BIAS = 0;
-// Warm off-white glow, distinct from the cool grid stroke (#CDD5DF).
+// Warm off-white, shared by the grid lines and the glowing squares.
 const TILE_FILL = "#F5F2EA";
-// Feathered tile edges: a small blur so the moving light is soft rather than a block.
-const GLOW_BLUR = 1.4;
 const SEED = 0x5a1506;
 
 type GridCell = {
@@ -82,12 +76,6 @@ function screenWeight(col: number) {
   if (center < edgeStart || center > edgeEnd) return 0;
   if (center < fullStart) return (center - edgeStart) / (fullStart - edgeStart);
   return (edgeEnd - center) / (edgeEnd - fullEnd);
-}
-
-function excluded(col: number, row: number) {
-  return EXCLUDED_ZONES.some(
-    (zone) => col >= zone.cols[0] && col < zone.cols[1] && row >= zone.rows[0] && row < zone.rows[1],
-  );
 }
 
 // Placement multiplier (>= 1) that favours the top-left corner near the logo.
@@ -140,15 +128,13 @@ function spreadOrder(cells: GridCell[]): GridCell[] {
   return path;
 }
 
-// Blue-noise roster of buttons: inside the mask, inside the on-screen crop, and
-// clear of the logo and headline. Buttons share one clock, spaced evenly, so a
-// steady handful stay lit while the lit set still moves around the panel.
+// Blue-noise roster of buttons inside the on-screen crop. Buttons share one
+// clock, spaced evenly, so a steady handful stay lit.
 function buildTiles(): PulseTile[] {
   const next = mulberry32(SEED);
   const pool: GridCell[] = [];
   for (let row = 0; row < GRID_ROWS; row += 1) {
     for (let col = 0; col < GRID_COLUMNS; col += 1) {
-      if (excluded(col, row)) continue;
       const weight = visibility(col, row) * screenWeight(col);
       if (weight >= MIN_VISIBILITY) pool.push({ col, row, weight });
     }
@@ -210,26 +196,21 @@ export const BrandGrid = () => {
         <mask id="salus-hero-mask">
           <rect fill="url(#salus-hero-fade)" height="960" width="1920" />
         </mask>
-        <filter id="salus-tile-glow" x="-20%" y="-20%" height="140%" width="140%">
-          <feGaussianBlur stdDeviation={GLOW_BLUR} />
-        </filter>
       </defs>
+      {PULSE_TILES.map((tile) => (
+        <rect
+          className="tile"
+          fill={TILE_FILL}
+          height={CELL - TILE_INSET * 2}
+          key={`${tile.col}-${tile.row}`}
+          style={tileStyle(tile, phaseOffset)}
+          width={CELL - TILE_INSET * 2}
+          x={tile.col * CELL + TILE_INSET}
+          y={tile.row * CELL + TILE_INSET}
+        />
+      ))}
       <g mask="url(#salus-hero-mask)">
-        <path d={GRID_LINES} fill="none" stroke="#CDD5DF" strokeOpacity="0.18" />
-        <g filter="url(#salus-tile-glow)">
-          {PULSE_TILES.map((tile) => (
-            <rect
-              className="tile"
-              fill={TILE_FILL}
-              height="64"
-              key={`${tile.col}-${tile.row}`}
-              style={tileStyle(tile, phaseOffset)}
-              width="64"
-              x={tile.col * CELL}
-              y={tile.row * CELL}
-            />
-          ))}
-        </g>
+        <path d={GRID_LINES} fill="none" stroke={TILE_FILL} strokeOpacity={PEAK_MAX} />
       </g>
     </svg>
   );
