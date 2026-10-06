@@ -11,6 +11,7 @@ const TILE_INSET = 0;
 const WIDTH = GRID_COLUMNS * CELL;
 const HEIGHT = GRID_ROWS * CELL;
 const MIN_VISIBILITY = 0.22;
+const MIN_SEPARATION = 2;
 // Inclusive columns that stay whole beside the 36rem form on a 1440px desktop.
 // Wider screens show more of the grid; a tile outside this band can be sliced.
 const SCREEN_COLS: [number, number] = [8, 21];
@@ -19,11 +20,8 @@ const SCREEN_COLS: [number, number] = [8, 21];
 const PULSE_COUNT = 64;
 const PULSE_DURATION = 52;
 const LIT_WINDOW = 8;
-// Peak opacity is 0.08 at the top and fades toward 0.05 lower on the panel.
+// Every square peaks at the same opacity as the grid line.
 const PEAK_MAX = 0.08;
-const PEAK_FLOOR = 0.6;
-// Random ± fraction applied to each button's peak so neighbours never match.
-const PEAK_JITTER = 0.15;
 // A console is a field of buttons, so placement is even across the visible panel.
 // Warm off-white, shared by the grid lines and the glowing squares.
 const TILE_FILL = "#F5F2EA";
@@ -52,8 +50,7 @@ function mulberry32(seed: number) {
   };
 }
 
-// Falloff from the top center. Faint cells are skipped, and the rest glow
-// a little dimmer as they get lower on the panel.
+// Falloff from the top center. Cells that would sit in the faint corners are skipped.
 function visibility(col: number, row: number) {
   const dx = (col * CELL + CELL / 2 - WIDTH / 2) / (0.95 * WIDTH);
   const dy = (row * CELL + CELL / 2) / (0.95 * HEIGHT);
@@ -105,39 +102,66 @@ function spreadOrder(cells: GridCell[]): GridCell[] {
   return path;
 }
 
-// Tiles stay inside columns that are fully on screen, and on a checkerboard so
-// two glowing squares never share an edge. The on-screen band is too narrow for
-// the dart throw to reach 64.
+// Scattered tiles inside the columns that stay fully on screen. Packs are drawn
+// until 64 fit without two squares sharing an edge, then the most crowded
+// extras are dropped.
 function buildTiles(): PulseTile[] {
   const next = mulberry32(SEED);
   const pool: GridCell[] = [];
   for (let row = 0; row < GRID_ROWS; row += 1) {
     for (let col = 0; col < GRID_COLUMNS; col += 1) {
-      if ((col + row) % 2 !== 0) continue;
       const weight = visibility(col, row) * screenWeight(col);
       if (weight >= MIN_VISIBILITY) pool.push({ col, row, weight });
     }
   }
 
-  for (let i = pool.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(next() * (i + 1));
-    const swap = pool[i];
-    pool[i] = pool[j];
-    pool[j] = swap;
+  let roster: GridCell[] = [];
+  for (let attempt = 0; attempt < 1000 && roster.length < PULSE_COUNT; attempt += 1) {
+    const packed: GridCell[] = [];
+    const order = pool.slice();
+    for (let i = order.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(next() * (i + 1));
+      const swap = order[i];
+      order[i] = order[j];
+      order[j] = swap;
+    }
+    for (const cell of order) {
+      const blocked = packed.some(
+        (other) => Math.abs(cell.col - other.col) + Math.abs(cell.row - other.row) < MIN_SEPARATION,
+      );
+      if (!blocked) packed.push(cell);
+    }
+    if (packed.length > roster.length) roster = packed;
   }
 
-  const path = spreadOrder(pool.slice(0, PULSE_COUNT));
+  while (roster.length > PULSE_COUNT) {
+    let crowded = 0;
+    let crowdedDistance = Infinity;
+    for (let index = 0; index < roster.length; index += 1) {
+      const cell = roster[index];
+      let nearest = Infinity;
+      for (let otherIndex = 0; otherIndex < roster.length; otherIndex += 1) {
+        if (otherIndex === index) continue;
+        const other = roster[otherIndex];
+        const distance = Math.hypot(cell.col - other.col, cell.row - other.row);
+        if (distance < nearest) nearest = distance;
+      }
+      if (nearest < crowdedDistance) {
+        crowdedDistance = nearest;
+        crowded = index;
+      }
+    }
+    roster.splice(crowded, 1);
+  }
 
-  return path.map((cell, index) => {
-    const jitter = 1 + (next() * 2 - 1) * PEAK_JITTER;
-    const peak = PEAK_MAX * (PEAK_FLOOR + (1 - PEAK_FLOOR) * cell.weight) * jitter;
-    return {
-      col: cell.col,
-      row: cell.row,
-      slot: index,
-      peak: Math.round(peak * 1000) / 1000,
-    };
-  });
+  const path = spreadOrder(roster.slice(0, PULSE_COUNT));
+
+  return path.map((cell, index) => ({
+    col: cell.col,
+    row: cell.row,
+    slot: index,
+    peak: PEAK_MAX,
+  }));
 }
 
 const PULSE_TILES = buildTiles();
