@@ -23,7 +23,13 @@ const styles: {
   },
 };
 
-export const Widget = (_props: { heading: string; description: string }) => {
+export const Widget = ({
+  children,
+}: {
+  heading: string;
+  description: string;
+  children?: React.ReactNode;
+}) => {
   return (
     <main className="login-form">
       <div style={{ width: "100%" }}>
@@ -31,7 +37,7 @@ export const Widget = (_props: { heading: string; description: string }) => {
         <p style={styles.description}>
           Enter your work email to continue.
         </p>
-        {getKindeWidget()}
+        {children ?? getKindeWidget()}
         <a className="help-link" href="mailto:support@salusfintech.com">
           Having trouble signing in?
         </a>

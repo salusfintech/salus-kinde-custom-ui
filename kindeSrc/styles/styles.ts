@@ -175,6 +175,26 @@ export const getStyles = (): string => `
     justify-content: center;
   }
 
+  .home-email {
+    width: 100%;
+  }
+
+  .home-email .kinde-form-field {
+    margin: 0 0 1rem;
+  }
+
+  .home-email input {
+    width: 100%;
+    padding: 0.75rem;
+  }
+
+  .home-email button {
+    border: 0;
+    color: #ffffff;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
   .help-link {
     display: block;
     margin-top: 1.5rem;
