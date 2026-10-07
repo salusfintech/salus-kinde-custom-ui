@@ -173,7 +173,6 @@ export const getStyles = (): string => `
     display: flex;
     flex-direction: column;
     justify-content: center;
-    overflow: hidden;
   }
 
   .help-link {
@@ -231,12 +230,16 @@ export const getStyles = (): string => `
       position: relative;
     }
 
-    .brand > * {
+    /* Child combinators are escaped in this style tag and the rule is dropped,
+       so each layer is named on its own. */
+    .brand-logo,
+    .brand-copy,
+    .brand-meta {
       position: relative;
       z-index: 1;
     }
 
-    .brand > .brand-grid {
+    .brand-grid {
       position: absolute;
       inset: 0;
       width: 100%;
