@@ -193,6 +193,14 @@ export const BrandGrid = () => {
         />
       ))}
       <path d={GRID_LINES} fill="none" stroke={LINE_STROKE} />
+      <defs>
+        <radialGradient cx="50%" cy="0%" id="salus-hero-veil" r="95%">
+          <stop offset="0%" stopColor={BRAND_BLUE} stopOpacity="0" />
+          <stop offset="55%" stopColor={BRAND_BLUE} stopOpacity="0.45" />
+          <stop offset="100%" stopColor={BRAND_BLUE} stopOpacity="1" />
+        </radialGradient>
+      </defs>
+      <rect fill="url(#salus-hero-veil)" height="960" width="1920" />
     </svg>
   );
 };
