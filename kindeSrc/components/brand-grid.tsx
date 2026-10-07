@@ -192,19 +192,7 @@ export const BrandGrid = () => {
           y={tile.row * CELL + TILE_INSET}
         />
       ))}
-      <defs>
-        <radialGradient cx="50%" cy="0%" id="salus-hero-fade" r="95%">
-          <stop offset="0%" stopColor="#fff" stopOpacity="1" />
-          <stop offset="55%" stopColor="#fff" stopOpacity="0.55" />
-          <stop offset="100%" stopColor="#fff" stopOpacity="0" />
-        </radialGradient>
-        <mask id="salus-hero-mask">
-          <rect fill="url(#salus-hero-fade)" height="960" width="1920" />
-        </mask>
-      </defs>
-      <g mask="url(#salus-hero-mask)">
-        <path d={GRID_LINES} fill="none" stroke={LINE_STROKE} />
-      </g>
+      <path d={GRID_LINES} fill="none" stroke={LINE_STROKE} />
     </svg>
   );
 };

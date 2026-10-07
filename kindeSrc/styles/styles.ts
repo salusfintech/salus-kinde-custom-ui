@@ -13,8 +13,6 @@ const kindeVariables = {
 } as const;
 
 export const getStyles = (): string => `
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;700&display=swap');
-
   :root {
     --kinde-base-font-family: ${kindeVariables.baseFontFamily};
     --kinde-control-select-text-border-radius: ${kindeVariables.controlSelectTextBorderRadius};
@@ -25,8 +23,13 @@ export const getStyles = (): string => `
     --kinde-button-secondary-border-style: ${kindeVariables.buttonSecondaryBorderStyle};
     --kinde-button-secondary-border-radius: ${kindeVariables.buttonSecondaryBorderRadius};
     --kinde-control-label-color: #0f172a;
+    --kinde-base-font-weight: 400;
     --kinde-button-font-weight: 600;
+    --kinde-control-select-text-block-size: 2.75rem;
     --kinde-control-select-text-border-color: #e2e8f0;
+    --kinde-control-select-text-border-color-focus: #0015d6;
+    --kinde-base-focus-border-radius: 0.5rem;
+    --kinde-base-focus-outline-color: #0015d6;
     --kinde-button-primary-border-width: 0;
     --kinde-designer-base-link-color: #0015d6;
     --kinde-base-color: #0f172a;
@@ -73,27 +76,49 @@ export const getStyles = (): string => `
 
   [data-kinde-control-select-text],
   [data-kinde-control-input],
-  input[type="email"],
-  input[type="text"],
-  input[type="password"] {
+  input[type=email],
+  input[type=text],
+  input[type=password] {
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: #ffffff;
     min-height: 2.75rem;
     border-radius: 0.5rem;
     border: 1px solid #e2e8f0;
+    box-shadow: none;
+    color: #0f172a;
     font-size: 0.9375rem;
+    font-weight: 400;
+    font-feature-settings: normal;
+    font-variant-numeric: lining-nums;
+    letter-spacing: normal;
+    line-height: 1.4;
     transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+
+  [data-kinde-control-select-text]::placeholder,
+  [data-kinde-control-input]::placeholder,
+  input[type=email]::placeholder,
+  input[type=text]::placeholder,
+  input[type=password]::placeholder {
+    color: #94a3b8;
+    font-weight: 400;
+    opacity: 1;
   }
 
   [data-kinde-control-select-text]:focus,
   [data-kinde-control-input]:focus,
-  input:focus {
+  input[type=email]:focus,
+  input[type=text]:focus,
+  input[type=password]:focus {
     border-color: #0015d6;
-    box-shadow: 0 0 0 3px rgba(0, 21, 214, 0.1);
+    box-shadow: 0 0 0 3px #ffffff, 0 0 0 5px rgba(0, 21, 214, 0.22);
     outline: none;
   }
 
   .kinde-branding,
   [data-kinde-branding],
-  [class*="kinde-branding"] {
+  [class*=kinde-branding] {
     display: none !important;
   }
 
@@ -292,11 +317,12 @@ export const getStyles = (): string => `
   }
 
   /* Steady console. The bright window is the last 12.5% of a shared 52s cycle,
-     so 8 of 64 buttons are glowing at once. Linear timing keeps that count fixed;
-     the curves only shape the rise and fall. */
+     so 8 of 64 buttons are glowing at once. Linear timing keeps that count fixed.
+     Rise and fall are the same length and the same curve, and the whole square
+     fades together. */
   @keyframes tile-glow {
     0%, 87.5% { opacity: 0; animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1); }
-    91%, 94.5% { opacity: var(--peak, 0.08); animation-timing-function: cubic-bezier(0.35, 0.25, 0.45, 1); }
+    91.5%, 96% { opacity: var(--peak, 0.08); animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1); }
     100% { opacity: 0; }
   }
 
