@@ -1,6 +1,6 @@
 const kindeVariables = {
   baseFontFamily:
-    "Inter, -apple-system, system-ui, BlinkMacSystemFont, Helvetica, Arial, Segoe UI, Roboto, sans-serif",
+    "system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif",
   controlSelectTextBorderRadius: "0.5rem",
   buttonPrimaryBackgroundColor: "#0015d6",
   buttonPrimaryColor: "#ffffff",
@@ -297,7 +297,7 @@ export const getStyles = (): string => `
 
     .brand-copy h1 {
       margin: 0 0 1rem;
-      font-family: Poppins, Arial, sans-serif;
+      font-family: system-ui, Segoe UI, Helvetica, Arial, sans-serif;
       font-size: 2.75rem;
       font-weight: 500;
       line-height: 1.3;
@@ -309,7 +309,7 @@ export const getStyles = (): string => `
 
     .brand-copy p {
       margin: 0;
-      font-family: Poppins, Arial, sans-serif;
+      font-family: system-ui, Segoe UI, Helvetica, Arial, sans-serif;
       font-size: 1.125rem;
       font-weight: 400;
       line-height: 1.5;

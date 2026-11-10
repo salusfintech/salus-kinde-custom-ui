@@ -1,4 +1,4 @@
-import { getDarkModeLogoUrl } from "@kinde/infrastructure";
+import { getLogoUrl } from "@kinde/infrastructure";
 import React from "react";
 
 import { BrandGrid } from "../components/brand-grid";
@@ -14,7 +14,7 @@ export const DefaultLayout: React.FC<LayoutProps> = ({ children }) => {
     <div className="page">
       <aside className="brand">
         <BrandGrid />
-        <img alt="Salus" className="brand-logo" src={getDarkModeLogoUrl()} />
+        <img alt="Salus" className="brand-logo" src={getLogoUrl()} />
         <div className="brand-copy">
           <h1>Make <strong>Gen Z</strong> Members for Life</h1>
           <p>
