@@ -30,6 +30,10 @@ export const Widget = ({
   description: string;
   children?: React.ReactNode;
 }) => {
+  // Kinde logs "No widget found" unless getKindeWidget() runs and its
+  // markup stays in the page. The home email form replaces that markup,
+  // so keep the real widget in the document without showing it.
+  const kindeWidget = getKindeWidget();
   return (
     <main className="login-form">
       <div style={{ width: "100%" }}>
@@ -37,7 +41,10 @@ export const Widget = ({
         <p style={styles.description}>
           Enter your work email to continue.
         </p>
-        {children ?? getKindeWidget()}
+        {children ?? kindeWidget}
+        {children ? (
+          <div className="kinde-widget-sentinel">{kindeWidget}</div>
+        ) : null}
         <a className="help-link" href="mailto:support@salusfintech.com">
           Having trouble signing in?
         </a>
