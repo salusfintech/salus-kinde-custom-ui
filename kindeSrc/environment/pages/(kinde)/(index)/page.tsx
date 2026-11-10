@@ -14,6 +14,8 @@ type PageContext = KindePageEvent["context"] & {
 
 // Home has no auth session, so getKindeWidget() renders an empty shell.
 // Collect the email here and hand it to the dashboard, which starts Kinde or Auth0.
+// data-kinde-handler-disabled keeps Kinde's global submit script from
+// cancelling this navigation. That script fetches the action and rejects redirects.
 function dashboardLoginAction(kindeDomain: string | undefined): string {
   const host = (kindeDomain ?? "").replace(/^https?:\/\//, "").replace(/\/$/, "");
   const dashboard =
@@ -45,6 +47,7 @@ const IndexPage: React.FC<KindePageEvent> = ({ context, request }) => {
           <form
             action={dashboardLoginAction(kindeDomain)}
             className="home-email"
+            data-kinde-handler-disabled="true"
             id="home-email"
             method="get"
           >
