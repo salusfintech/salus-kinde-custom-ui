@@ -16,22 +16,36 @@ type PageContext = KindePageEvent["context"] & {
 // Collect the email here and hand it to the dashboard, which starts Kinde or Auth0.
 // data-kinde-handler-disabled keeps Kinde's global submit script from
 // cancelling this navigation. That script fetches the action and rejects redirects.
-function dashboardLoginAction(kindeDomain: string | undefined): string {
-  const host = (kindeDomain ?? "").replace(/^https?:\/\//, "").replace(/\/$/, "");
-  const dashboard =
-    host === "login.salusfintech.com"
-      ? "https://dashboard.salusfintech.com"
-      : "https://dashboard.salusfintech-dev.com";
-  return `${dashboard}/api/v1/dashboard/auth/login`;
+const DASHBOARD_ORIGIN_BY_LOGIN_HOST: Record<string, string> = {
+  "login.salusfintech.com": "https://dashboard.salusfintech.com",
+  "login.salusfintech-dev.com": "https://dashboard.salusfintech-dev.com",
+};
+
+function loginHost(raw: string | undefined): string {
+  return (raw ?? "")
+    .replace(/^https?:\/\//, "")
+    .replace(/\/$/, "")
+    .split(":")[0]
+    .toLowerCase();
+}
+
+function dashboardLoginAction(kindeDomain: string | undefined): string | undefined {
+  const origin = DASHBOARD_ORIGIN_BY_LOGIN_HOST[loginHost(kindeDomain)];
+  return origin ? `${origin}/api/v1/dashboard/auth/login` : undefined;
 }
 
 const POINT_FORM_AT_DASHBOARD = `(function () {
   var form = document.getElementById("home-email");
   if (!form) return;
-  var dashboard =
-    window.location.hostname === "login.salusfintech.com"
-      ? "https://dashboard.salusfintech.com"
-      : "https://dashboard.salusfintech-dev.com";
+  var targets = {
+    "login.salusfintech.com": "https://dashboard.salusfintech.com",
+    "login.salusfintech-dev.com": "https://dashboard.salusfintech-dev.com"
+  };
+  var dashboard = targets[window.location.hostname];
+  if (!dashboard) {
+    form.removeAttribute("action");
+    return;
+  }
   form.action = dashboard + "/api/v1/dashboard/auth/login";
 })();`;
 
@@ -49,7 +63,7 @@ const IndexPage: React.FC<KindePageEvent> = ({ context, request }) => {
             className="home-email"
             data-kinde-handler-disabled="true"
             id="home-email"
-            method="get"
+            method="post"
           >
             <div className="kinde-form-field">
               <label
