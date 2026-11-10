@@ -43,7 +43,9 @@ export const Widget = ({
         </p>
         {children ?? kindeWidget}
         {children ? (
-          <div className="kinde-widget-sentinel">{kindeWidget}</div>
+          <div className="kinde-widget-sentinel" inert>
+            {kindeWidget}
+          </div>
         ) : null}
         <a className="help-link" href="mailto:support@salusfintech.com">
           Having trouble signing in?
