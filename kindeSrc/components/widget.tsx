@@ -24,10 +24,12 @@ const styles: {
 };
 
 export const Widget = ({
+  heading = "Sign in",
+  description = "Enter your work email to continue.",
   children,
 }: {
-  heading: string;
-  description: string;
+  heading?: string;
+  description?: string;
   children?: React.ReactNode;
 }) => {
   // Kinde logs "No widget found" unless getKindeWidget() runs and its
@@ -37,10 +39,8 @@ export const Widget = ({
   return (
     <main className="login-form">
       <div style={{ width: "100%" }}>
-        <h1 style={styles.heading}>Sign in</h1>
-        <p style={styles.description}>
-          Enter your work email to continue.
-        </p>
+        <h1 style={styles.heading}>{heading}</h1>
+        {description ? <p style={styles.description}>{description}</p> : null}
         {children ?? kindeWidget}
         {children ? (
           <div className="kinde-widget-sentinel" inert>

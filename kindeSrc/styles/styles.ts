@@ -220,6 +220,22 @@ export const getStyles = (): string => `
     color: #0015d6;
   }
 
+  .account-not-found-back {
+    margin: 0;
+    text-align: center;
+    font-size: 0.875rem;
+  }
+
+  .account-not-found-back a {
+    color: #0015d6;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .account-not-found-back a:hover {
+    text-decoration: underline;
+  }
+
   /* ── Footer ── */
 
   .footer {
@@ -347,6 +363,10 @@ export const getStyles = (): string => `
     }
 
     .help-link {
+      text-align: left;
+    }
+
+    .account-not-found-back {
       text-align: left;
     }
   }
