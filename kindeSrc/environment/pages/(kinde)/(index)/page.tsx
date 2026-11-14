@@ -55,8 +55,8 @@ const IndexPage: React.FC<KindePageEvent> = ({ context, request }) => {
     <Root context={context} request={request}>
       <DefaultLayout>
         <Widget
-          heading={context.widget.content.heading}
-          description={context.widget.content.description}
+          heading="Sign in"
+          description="Enter your work email to continue."
         >
           <form
             action={dashboardLoginAction(kindeDomain)}
